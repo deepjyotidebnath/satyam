@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hotel Satyam Sundaram — Family Restaurant, Cooch Behar</title>
+<meta name="description" content="Hotel Satyam Sundaram (হোটেল সত্যম সুন্দরম) — family restaurant on Raj Rajendra Narayan Road (N.N. Road), Cooch Behar. Unlimited rice thalis, biryani, pulao, naan, paneer and chicken curries. Open daily 10 AM – 10 PM.">
+<meta property="og:title" content="Hotel Satyam Sundaram — Family Restaurant, Cooch Behar">
+<meta property="og:description" content="Unlimited rice specials from ₹100. Raj Rajendra Narayan Rd, Cooch Behar. Call 86701 65764.">
+<meta property="og:image" content="assets/images/hero-signboard.jpg">
+<link rel="icon" href="assets/images/placeholder.svg">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Restaurant","name":"Hotel Satyam Sundaram","alternateName":"হোটেল সত্যম সুন্দরম","servesCuisine":["North Indian","Bengali","Chinese"],"priceRange":"₹","telephone":"+91-8670165764","image":"assets/images/hero-signboard.jpg","address":{"@type":"PostalAddress","streetAddress":"8CGX+JC5, Raj Rajendra Narayan Rd","addressLocality":"Cooch Behar","addressRegion":"West Bengal","postalCode":"736101","addressCountry":"IN"},"geo":{"@type":"GeoCoordinates","latitude":26.3265048,"longitude":89.4486212},"openingHours":"Mo-Su 10:00-22:00","aggregateRating":{"@type":"AggregateRating","ratingValue":"3.8","reviewCount":"162"}}
+</script>
+</head>
+<body>
+<nav><b id="brand"></b><a href="#about">About</a><a href="#menu">Menu</a><a href="#gallery">Photos</a><a href="#visit">Location</a><a href="#reserve">Reserve</a><a href="#qr-sec">QR</a></nav>
+
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <span class="badge" id="tableBadge" style="display:none"></span>
+    <p class="bn" id="bnName"></p>
+    <h1 id="hName"></h1>
+    <p id="tag"></p>
+    <div class="chips sans">
+      <a class="chip" id="ratingChip" target="_blank" rel="noopener">★ <b>3.8</b> on Google · 162 reviews</a>
+      <span class="chip" id="openChip">Open daily 10 AM – 10 PM</span>
+      <span class="chip">Raj Rajendra Narayan Rd, Cooch Behar</span>
+    </div>
+    <a class="btn alt" href="#menu">View Menu</a>
+    <a class="btn" id="heroCall">Call to Order</a>
+    <a class="btn ghost-w" href="#visit">Get Directions</a>
+  </div>
+</section>
+
+<section id="about">
+  <div class="two about">
+    <div>
+      <h2>A local favourite on N.N. Road</h2>
+      <p class="sub">Hotel Satyam Sundaram is a family restaurant in the heart of Cooch Behar, serving hearty North Indian, Bengali and Chinese food at honest prices — famous for its <b>unlimited rice</b> specials served with 3 pieces of chicken.</p>
+      <ul class="facts sans">
+        <li><b>Unlimited rice</b> thalis from ₹100</li>
+        <li>Fresh naan &amp; kulcha from the kitchen tandoor</li>
+        <li>Paneer butter masala, chowmein, egg roll &amp; more</li>
+        <li>Dine-in · Takeaway · Online ordering</li>
+      </ul>
+    </div>
+    <figure class="about-img"><img src="assets/images/storefront-night.jpg" alt="Hotel Satyam Sundaram storefront at night on N.N. Road, Cooch Behar" loading="lazy"><figcaption>Our front counter on Raj Rajendra Narayan Road</figcaption></figure>
+  </div>
+</section>
+
+<section id="menu">
+  <h2>Our Menu</h2>
+  <p class="sub">Prices for the unlimited rice specials are from our signboard. Tap Add to build an order and send it to us on WhatsApp — we'll confirm prices for other dishes.</p>
+  <div class="tabs" id="tabs"></div>
+  <div class="grid" id="items"></div>
+  <div class="also" id="also"></div>
+</section>
+
+<section id="gallery">
+  <h2>Photos</h2>
+  <p class="sub">Real photos of our restaurant, kitchen and food, shared by guests on Google Maps.</p>
+  <div class="gallery" id="gal"></div>
+</section>
+
+<section id="visit">
+  <h2>Location</h2>
+  <p class="sub">Find us on Raj Rajendra Narayan Road (N.N. Road), near the chowpathi, Cooch Behar.</p>
+  <div class="map"><iframe id="mapFrame" title="Map: Hotel Satyam Sundaram, Cooch Behar" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
+  <div class="two" style="margin-top:18px">
+    <div class="box"><h3>Address</h3>
+      <p id="addr"></p>
+      <p class="sans small">Plus code: <b>8CGX+JC5 Cooch Behar</b></p>
+      <a class="btn" id="dirBtn" target="_blank" rel="noopener">Get Directions</a>
+      <a class="btn ghost" id="mapBtn" target="_blank" rel="noopener">View on Google Maps</a>
+    </div>
+    <div class="box"><h3>Contact &amp; hours</h3>
+      <p class="sans"><a class="btn ghost" id="callBtn"></a> <a class="btn ghost" id="callBtn2"></a></p>
+      <p class="sans"><a class="btn wa" id="waBtn" target="_blank" rel="noopener">WhatsApp us</a></p>
+      <table id="hours"></table>
+    </div>
+  </div>
+</section>
+
+<section id="reserve">
+  <h2>Reserve a Table</h2>
+  <p class="sub">Coming with family or a group? Choose a slot and we'll confirm on WhatsApp.</p>
+  <form id="rf">
+    <div class="row"><label>Name<input name="name" required></label><label>Phone<input name="phone" type="tel" required pattern="[0-9+ ]{8,15}"></label></div>
+    <div class="row"><label>Date<input name="date" type="date" required></label><label>Time<select name="time" required></select></label></div>
+    <div class="row"><label>Guests<select name="guests"></select></label><label>Seating<select name="seat"><option>Family area</option><option>Any table</option></select></label></div>
+    <label>Special request<textarea name="note" rows="2" placeholder="Birthday, less spicy, extra rice…"></textarea></label>
+    <button class="btn wa" type="submit">Reserve via WhatsApp</button>
+    <div class="ok" id="rok"></div>
+  </form>
+</section>
+
+<section id="qr-sec">
+  <h2>Table QR Codes</h2>
+  <p class="sub">Print one per table. Guests scan to open this menu with their table number pre-filled.</p>
+  <div class="box" style="text-align:center">
+    <label style="max-width:200px;margin:0 auto 12px">Table number<input id="tnum" type="number" min="1" value="1"></label>
+    <div id="qr"></div>
+    <p class="sans" id="qrUrl" style="font-size:12px;color:var(--mute);word-break:break-all"></p>
+    <button class="btn" id="dl">Download PNG</button> <button class="btn ghost" onclick="window.print()">Print</button>
+  </div>
+</section>
+
+<footer id="foot"></footer>
+
+<div class="cart" id="cart"><span id="cartTxt"></span><button class="btn wa" id="cartBtn">Review order</button></div>
+
+<dialog id="dlg">
+  <h3>Your order</h3>
+  <div id="lines" style="margin:12px 0"></div>
+  <div class="line"><b>Total</b><b id="tot"></b></div>
+  <p class="small" id="totNote" style="color:var(--mute);margin:0"></p>
+  <label style="margin-top:10px">Your name<input id="oname"></label>
+  <label style="margin-top:10px">Type<select id="otype"><option>Dine-in</option><option>Takeaway</option><option>Delivery</option></select></label>
+  <label style="margin-top:10px">Notes<textarea id="onote" rows="2" placeholder="Less spicy, no onion…"></textarea></label>
+  <div style="display:flex;gap:8px;margin-top:14px"><button class="btn ghost" onclick="dlg.close()">Close</button><button class="btn wa" id="send" style="flex:1">Send on WhatsApp</button></div>
+</dialog>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
