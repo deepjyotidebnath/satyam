@@ -1,0 +1,8 @@
+{
+  "name": "satyam-sundaram",
+  "private": true,
+  "description": "Hotel Satyam Sundaram website + AI table monitoring",
+  "dependencies": {
+    "@netlify/blobs": "^10.0.0"
+  }
+}

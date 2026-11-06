@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Manager Dashboard — Hotel Satyam Sundaram</title>
+<link rel="icon" href="assets/images/placeholder.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/dashboard.css">
+</head>
+<body class="dash">
+
+<div id="login" class="login">
+  <form id="lf" class="box">
+    <h2>Manager login</h2>
+    <p class="sub">Hotel Satyam Sundaram · Smart Table Monitor</p>
+    <label>PIN<input type="password" id="pin" inputmode="numeric" autocomplete="current-password" required></label>
+    <button class="btn">Open dashboard</button>
+    <div class="err" id="lerr"></div>
+    <p class="small" id="lhint"></p>
+  </form>
+</div>
+
+<div id="app" hidden>
+  <header class="dhead">
+    <b>Satyam Sundaram</b><span class="dsub">Smart Table Monitor</span>
+    <span id="mode" class="mode"></span>
+    <span id="clock" class="clock"></span>
+    <a href="index.html#tables" target="_blank" rel="noopener" class="btn ghost sm">View website</a>
+    <button class="btn ghost sm" id="notifyBtn">Enable alerts</button>
+    <button class="btn ghost sm" id="logout">Logout</button>
+  </header>
+  <main>
+    <div class="stats" id="stats"></div>
+
+    <div class="cols">
+      <section class="panel">
+        <div class="ph"><h3>Floor — live tables</h3><button class="btn ghost sm" id="resetBtn">Reset all to free</button></div>
+        <div class="dgrid" id="floor"></div>
+      </section>
+      <section class="panel">
+        <div class="ph"><h3>Alerts <span id="alertN" class="pill-n"></span></h3>
+          <div class="btnrow"><button class="btn wa sm" id="waAlerts">Send to staff on WhatsApp</button><button class="btn ghost sm" id="clearAlerts">Clear</button></div></div>
+        <ul id="alerts" class="alerts"></ul>
+      </section>
+    </div>
+
+    <section class="panel" id="videoP">
+      <div class="ph"><h3>AI video analysis</h3><span class="small" id="vstatus">Upload a CCTV or phone video of the dining area.</span></div>
+      <div class="vwrap">
+        <div class="vleft">
+          <label class="drop" id="drop"><input type="file" id="vfile" accept="video/*" hidden><b>Upload restaurant video</b><span>MP4 / WebM / MOV · processed on this device, never uploaded</span></label>
+          <div class="stage" id="stage" hidden><video id="vid" muted playsinline preload="auto"></video><canvas id="ov"></canvas></div>
+          <div class="prog" id="prog" hidden><i id="progBar"></i></div>
+          <p class="small legend-v"><span style="color:#ff3b6b">■</span> person &nbsp; <span style="color:#d9a400">■</span> plates / cups / food &nbsp; zone colours = table status</p>
+        </div>
+        <div class="vright">
+          <h4>1. Table zones</h4>
+          <p class="small">Mark where each table is in the camera view. Zones are saved and reused for the same camera.</p>
+          <div class="btnrow"><button class="btn sm" id="autoZ" disabled>Auto-detect tables</button><button class="btn ghost sm" id="drawZ" disabled>Draw zone</button><button class="btn ghost sm" id="clearZ">Clear zones</button></div>
+          <ul id="zlist" class="zlist"></ul>
+          <h4>2. Analyse</h4>
+          <label class="chk"><input type="checkbox" id="autoApply" checked> Update tables &amp; website automatically</label>
+          <label class="chk"><input type="checkbox" id="addVis" checked> Add detected customers to today's count</label>
+          <button class="btn" id="runA" disabled>Analyse video</button>
+          <div id="result"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cols">
+      <section class="panel">
+        <div class="ph"><h3>Bookings</h3><span class="small" id="bkInfo"></span></div>
+        <div class="tbl-wrap"><table class="dt" id="bk"></table></div>
+      </section>
+      <section class="panel">
+        <div class="ph"><h3>Customers today</h3><span class="small" id="visInfo"></span></div>
+        <div class="bars" id="bars"></div>
+        <form id="walkin" class="inline"><label>Add walk-in customers<input type="number" id="walkN" min="1" max="100" value="2"></label><button class="btn sm">Add</button></form>
+      </section>
+    </div>
+
+    <section class="panel">
+      <div class="ph"><h3>Recent video analyses</h3></div>
+      <div id="hist" class="small">No videos analysed yet.</div>
+    </section>
+
+    <section class="panel">
+      <div class="ph"><h3>Settings</h3></div>
+      <form id="sf" class="row3">
+        <label>Number of tables<input type="number" name="tableCount" min="1" max="60"></label>
+        <label>Seats per table (comma separated)<input name="seats"></label>
+        <label>Staff / manager WhatsApp<input name="managerWa" placeholder="91XXXXXXXXXX"></label>
+        <button class="btn sm">Save settings</button>
+      </form>
+    </section>
+  </main>
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="assets/js/rm-core.js"></script>
+<script src="assets/js/rm-api.js"></script>
+<script src="assets/js/vision.js"></script>
+<script src="assets/js/dashboard.js"></script>
+</body>
+</html>

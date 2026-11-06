@@ -158,29 +158,89 @@ $("send").onclick = () => {
   window.open("https://wa.me/" + CFG.whatsapp + "?text=" + encodeURIComponent(msg), "_blank");
 };
 
-/* ===== reservation ===== */
+/* ===== live tables + booking ===== */
 const rf = $("rf");
+const STATUS_TXT = {free: "Free", booked: "Booked", occupied: "Occupied", cleaning: "Being cleaned"};
+let lastUpdate = 0;
+const ago = t => { const s = Math.round((Date.now() - t) / 1000); return s < 60 ? "just now" : s < 3600 ? Math.round(s / 60) + " min ago" : Math.round(s / 3600) + " h ago"; };
+
+async function renderLive() {
+  try {
+    const v = await RM.getPublic();
+    lastUpdate = v.updatedAt;
+    const c = v.counts;
+    $("liveSum").innerHTML = `<b class="c-free">${c.free}</b> free · <b class="c-booked">${c.booked}</b> booked · <b class="c-occupied">${c.occupied}</b> occupied · <b class="c-cleaning">${c.cleaning}</b> being cleaned` +
+      (v.open ? "" : ` <span class="small">· Restaurant is closed now — you can still book for later.</span>`);
+    $("liveGrid").innerHTML = v.tables.map(t =>
+      `<div class="tile ${t.status}${table && +table === t.id ? " me" : ""}"><b>T${t.id}</b><span>${t.seats} seats</span><em>${STATUS_TXT[t.status]}</em></div>`).join("");
+    $("liveUpd").innerHTML = (RM.mode === "local" ? "Demo mode · " : "<span class=\"live-on\">● Live</span> · ") + "updated " + ago(lastUpdate);
+  } catch (e) { $("liveUpd").textContent = "Could not load table status."; }
+}
+
+async function renderPick() {
+  const f = rf.elements;
+  f.table.value = "";
+  updateBookBtn();
+  if (!f.date.value || !f.time.value) { $("pickGrid").innerHTML = ""; $("pickInfo").textContent = "Choose a date and time first"; return; }
+  try {
+    const list = await RM.availability({date: f.date.value, time: f.time.value, guests: f.guests.value});
+    const n = list.filter(t => t.available).length;
+    $("pickInfo").textContent = n ? `${n} table${n > 1 ? "s" : ""} free for ${f.guests.value} at ${f.time.selectedOptions[0].text}` : "No table free at this time — try another time.";
+    $("pickGrid").innerHTML = list.map(t => t.available
+      ? `<button type="button" class="tile free" data-t="${t.id}"><b>T${t.id}</b><span>${t.seats} seats</span><em>Free</em></button>`
+      : `<div class="tile off"><b>T${t.id}</b><span>${t.seats} seats</span><em>${esc(t.reason)}</em></div>`).join("");
+  } catch (e) { $("pickInfo").textContent = e.message; $("pickGrid").innerHTML = ""; }
+}
+function updateBookBtn() {
+  const t = rf.elements.table.value;
+  $("bookBtn").disabled = !t;
+  $("bookBtn").textContent = t ? `Book Table ${t}` : "Select a table";
+}
+
 (function initForm() {
   const t = rf.elements.time;
-  for (let h = 10; h <= 21; h++) for (const m of ["00", "30"]) {
-    if (h === 21 && m === "30") continue;
-    const hh = h > 12 ? h - 12 : h, ap = h >= 12 ? "PM" : "AM";
-    t.insertAdjacentHTML("beforeend", `<option>${hh}:${m} ${ap}</option>`);
-  }
+  RMCore.slots().forEach(s => t.insertAdjacentHTML("beforeend", `<option value="${s}">${RMCore.fmtTime(s)}</option>`));
   const g = rf.elements.guests;
   for (let i = 1; i <= 12; i++) g.insertAdjacentHTML("beforeend", `<option value="${i}">${i} ${i === 1 ? "guest" : "guests"}</option>`);
   g.value = "2";
-  const today = new Date(); today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
-  rf.elements.date.min = today.toISOString().slice(0, 10);
+  const now = RMCore.ist(Date.now());
+  rf.elements.date.min = rf.elements.date.value = now.date;
+  const next = RMCore.slots().find(s => +s.slice(0, 2) * 60 + +s.slice(3) >= now.min + 30);
+  if (next) t.value = next; else { const d = new Date(Date.now() + (RMCore.TZ_MIN + 1440) * 60000); rf.elements.date.value = d.toISOString().slice(0, 10); }
 })();
-rf.addEventListener("submit", e => {
+["date", "time", "guests"].forEach(n => rf.elements[n].addEventListener("change", renderPick));
+$("pickGrid").addEventListener("click", e => {
+  const b = e.target.closest("button[data-t]"); if (!b) return;
+  $("pickGrid").querySelectorAll(".sel").forEach(x => x.classList.remove("sel"));
+  b.classList.add("sel"); rf.elements.table.value = b.dataset.t; updateBookBtn();
+});
+rf.addEventListener("submit", async e => {
   e.preventDefault();
   const f = rf.elements;
-  const msg = `*Table reservation — ${CFG.name}*\nName: ${f.name.value}\nPhone: ${f.phone.value}\nDate: ${f.date.value}\nTime: ${f.time.value}\nGuests: ${f.guests.value}\nSeating: ${f.seat.value}` +
-    (f.note.value.trim() ? `\nRequest: ${f.note.value.trim()}` : "");
-  window.open("https://wa.me/" + CFG.whatsapp + "?text=" + encodeURIComponent(msg), "_blank");
-  $("rok").textContent = "Opening WhatsApp — send the message to confirm your booking.";
+  $("rerr").textContent = "";
+  if (!f.table.value) { $("rerr").textContent = "Please choose a table."; return; }
+  $("bookBtn").disabled = true; $("bookBtn").textContent = "Booking…";
+  try {
+    const b = await RM.book({name: f.name.value, phone: f.phone.value, date: f.date.value, time: f.time.value, guests: f.guests.value, table: f.table.value, note: f.note.value});
+    const when = `${b.date} at ${RMCore.fmtTime(b.time)}`;
+    const msg = `*Table booking — ${CFG.name}*\nBooking ID: ${b.id}\nTable: ${b.table}\nName: ${b.name}\nPhone: ${b.phone}\nDate: ${b.date}\nTime: ${RMCore.fmtTime(b.time)}\nGuests: ${b.guests}` + (b.note ? `\nRequest: ${b.note}` : "");
+    $("rok").hidden = false;
+    $("rok").innerHTML = `<h3>Table ${b.table} is booked!</h3><p class="sans">Booking ID <b>${esc(b.id)}</b> · ${esc(b.name)} · ${b.guests} guests · ${esc(when)}</p>
+      <p class="sans small">Please arrive on time — we hold the table for you for 90 minutes. Need to change anything? Call ${esc(CFG.phone)}.</p>
+      <a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/${CFG.whatsapp}?text=${encodeURIComponent(msg)}">Send confirmation on WhatsApp</a>
+      <button class="btn ghost" type="button" id="another">Book another table</button>`;
+    rf.hidden = true;
+    $("another").onclick = () => { $("rok").hidden = true; rf.hidden = false; renderPick(); };
+    $("rok").scrollIntoView({behavior: "smooth", block: "center"});
+    renderLive();
+  } catch (err) {
+    $("rerr").textContent = err.message;
+    renderPick();
+  }
 });
+RM.watch(() => { renderLive(); if (!rf.elements.table.value) renderPick(); });
+setInterval(() => { if (lastUpdate) $("liveUpd").innerHTML = (RM.mode === "local" ? "Demo mode · " : "<span class=\"live-on\">● Live</span> · ") + "updated " + ago(lastUpdate); }, 15000);
+renderLive(); renderPick();
 
 /* ===== gallery ===== */
 $("gal").innerHTML = GALLERY.map(([f, c]) =>

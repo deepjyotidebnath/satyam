@@ -18,7 +18,7 @@
 </script>
 </head>
 <body>
-<nav><b id="brand"></b><a href="#about">About</a><a href="#menu">Menu</a><a href="#gallery">Photos</a><a href="#visit">Location</a><a href="#reserve">Reserve</a><a href="#qr-sec">QR</a></nav>
+<nav><b id="brand"></b><a href="#about">About</a><a href="#menu">Menu</a><a href="#gallery">Photos</a><a href="#visit">Location</a><a href="#tables">Live Tables</a><a href="#reserve">Book</a><a href="#qr-sec">QR</a></nav>
 
 <section class="hero" id="top">
   <div class="hero-inner">
@@ -86,17 +86,33 @@
   </div>
 </section>
 
+<section id="tables">
+  <h2>Live Tables</h2>
+  <p class="sub">Updated automatically from our in-restaurant monitoring. Green tables are clean and free right now.</p>
+  <div class="box live-box">
+    <div class="live-head sans">
+      <div class="legend"><span class="st free">Free</span><span class="st booked">Booked</span><span class="st occupied">Occupied</span><span class="st cleaning">Being cleaned</span></div>
+      <span class="small" id="liveUpd">Loading…</span>
+    </div>
+    <div class="live-sum sans" id="liveSum"></div>
+    <div class="tgrid" id="liveGrid"></div>
+  </div>
+</section>
+
 <section id="reserve">
-  <h2>Reserve a Table</h2>
-  <p class="sub">Coming with family or a group? Choose a slot and we'll confirm on WhatsApp.</p>
+  <h2>Book a Table</h2>
+  <p class="sub">Pick a time and party size, then choose any free table. Your table is held for you instantly.</p>
   <form id="rf">
-    <div class="row"><label>Name<input name="name" required></label><label>Phone<input name="phone" type="tel" required pattern="[0-9+ ]{8,15}"></label></div>
+    <div class="row"><label>Name<input name="name" required maxlength="60"></label><label>Phone<input name="phone" type="tel" required pattern="[0-9+ ]{8,15}"></label></div>
     <div class="row"><label>Date<input name="date" type="date" required></label><label>Time<select name="time" required></select></label></div>
-    <div class="row"><label>Guests<select name="guests"></select></label><label>Seating<select name="seat"><option>Family area</option><option>Any table</option></select></label></div>
-    <label>Special request<textarea name="note" rows="2" placeholder="Birthday, less spicy, extra rice…"></textarea></label>
-    <button class="btn wa" type="submit">Reserve via WhatsApp</button>
-    <div class="ok" id="rok"></div>
+    <div class="row"><label>Guests<select name="guests"></select></label><label>Special request<input name="note" maxlength="200" placeholder="Birthday, less spicy, extra rice…"></label></div>
+    <div class="pick-head sans"><b>Choose your table</b><span class="small" id="pickInfo"></span></div>
+    <div class="tgrid pick" id="pickGrid"></div>
+    <input type="hidden" name="table">
+    <button class="btn" type="submit" id="bookBtn" disabled>Select a table</button>
+    <div class="err sans" id="rerr"></div>
   </form>
+  <div class="box booked-ok" id="rok" hidden></div>
 </section>
 
 <section id="qr-sec">
@@ -125,6 +141,8 @@
   <div style="display:flex;gap:8px;margin-top:14px"><button class="btn ghost" onclick="dlg.close()">Close</button><button class="btn wa" id="send" style="flex:1">Send on WhatsApp</button></div>
 </dialog>
 
+<script src="assets/js/rm-core.js"></script>
+<script src="assets/js/rm-api.js"></script>
 <script src="assets/js/app.js"></script>
 </body>
 </html>
